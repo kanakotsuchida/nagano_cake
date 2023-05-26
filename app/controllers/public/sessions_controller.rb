@@ -24,4 +24,16 @@ class Public::SessionsController < Devise::SessionsController
   # def configure_sign_in_params
   #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
   # end
+  
+  protected
+  #退会しているかを判断するメゾット
+  def reject_withdrow_customer
+    @customer = Customer.find_by(email: params[:customer][:email].downcase)
+     if @customer
+       if (@customer.valid_password?(params[:customer][:password]) && (@customer.active_for_authentication? == false))
+         flash[:notice] = "退会済みのためログインできません。"
+         redirect_to new_customer_session_path
+       end
+     end
+  end
 end
