@@ -1,30 +1,31 @@
-<h2 class="pb-2 mb-4"><%= @item.name %></h2>
-
-<div class="row">
-  <div class="col-6">
-    <%= attachment_image_tag @item, :image, format: 'jpeg', fallback: "ithigo.jpg", style: "max-width: 100%"%>
-  </div>
-  <div class="col-6">
-    <h5 class="mb-3">商品説明</h5>
-    <div class="item-description mb-5">
-      <%= @item.description %>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-5">
+            <div class="item-image">
+                <%= image_tag @item.get_image(400,500)%>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="item-detail">
+                <h3 class="font-weight-bold"><%= @item.name %></h3>
+                <br>
+                <p><%= @item.introduction %></p>
+                <br>
+                <br>
+                <h4>¥<%= @item.with_tax_price %>(税込)</h4>
+                <br>
+                <div>
+                    <%= form_with model: @cart_item, url: cart_items_path do |f| %>
+                    <span class=" item-quantity mr-5">
+                        <%= f.hidden_field :item_id , :value => @item.id  %>
+                        <%= f.select :quantity , *[1..10] %>
+                    </span>
+                    <span class="cart-btn">
+                        <%= f.submit "カートに入れる",class: "btn btn-info" %>
+                    </span>
+                    <% end %>
+                </div>
+            </div>
+        </div>
     </div>
-    <% if current_end_user %>
-  <% if @duplication == 0 %>
-    <%= form_for @cart_item do |f| %>
-      <div class="form-group has-icon">
-        <%= f.label :個数 %>
-        <%= f.select :amount, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], class:"form-control" %>
-      </div>
-      
-      <%= f.hidden_field :item_id , value: @item.id %>
-    
-      <%= f.submit "カートに追加する", class:"btn btn-primary btn-block btn-base-1" %>
-    <% end %>
-  <% else %>
-    <div>カートに追加済み</div>
-  <% end %>
-<% end %>
-    
-  </div>
 </div>

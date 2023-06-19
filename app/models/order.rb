@@ -1,8 +1,14 @@
 class Order < ApplicationRecord
-  belongs_to :customer
-  has_many :ordered_items
-
-  enum payment_method: { credit: 0, bunk: 1 }
-  enum status: { a: 0, b: 1, c: 2, d: 3, e: 4 }
-  
+   belongs_to :customer
+	  has_many :order_details, dependent: :destroy
+	
+	  validates :customer_id, :address, :name, :total_payment, :payment_method, presence: true
+	  validates :post_code, length: {is: 7}, numericality: { only_integer: true }
+    
+    enum payment_method: {"クレジットカード": 0, "銀行振込": 1}
+    # enum order_status: { "入金待ち": 0, "入金確認": 1, "製作中": 2, "発送準備中": 3, "発送済み": 4}
+    
+    def full_address
+        self.post_code + "" + self.address
+    end
 end

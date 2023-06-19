@@ -1,0 +1,83 @@
+<div class="container mt-5">
+  <h3>新規会員登録</h3>
+  <div class="row">
+      <div class="col-lg-12 mx-auto ">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        
+        <!--<div class="row">-->
+        <!--  <div class="col-md-2">名前</div>-->
+        <!--  <div class="col-md-1">(姓)</div>-->
+        <!--  <div class="col-md-4">-->
+        <!--    <%= f.text_field :first_name, class: 'form-control' %>-->
+        <!--  </div>-->
+        <!--  <div class="col-md-1">(名)</div>-->
+        <!--  <div class="col-md-4">-->
+        <!--    <%= f.text_field :last_name, class: 'form-control' %>-->
+        <!--  </div>-->
+        <!--</div>-->
+        
+        <table>
+        <tbody>
+          <tr>
+            <th>名前</th>
+            <td class="sign-up-small-cell">(姓)</td>
+            <td><%= f.text_field :first_name, autofocus: true %></td>
+            <td class="sign-up-small-cell">(名)</td>
+            <td><%= f.text_field :last_name, autofocus: true %></td>
+          </tr>
+          <tr>
+            <th>フリガナ</th>
+            <td class="sign-up-small-cell">(セイ)</td>
+            <td><%= f.text_field :last_name_kana, autofocus: true %></td>
+            <td class="sign-up-small-cell">(メイ)</td>
+            <td><%= f.text_field :first_name_kana, autofocus: true %></td>
+          </tr>
+          <tr>
+            <th>メールアドレス</th>
+            <td class="sign-up-small-cell"></td>
+            <td><%= f.email_field :email, autofocus: true, autocomplete: "email"%></td>
+          </tr>
+          <tr>
+          <th>郵便番号（ハイフンなし）</th>
+          <td class="sign-up-small-cell"></td>
+          <td><%= f.text_field :post_code, autofocus: true %></td>
+          </tr>
+          <tr>
+            <th>住所</th>
+            <td class="sign-up-small-cell"></td>
+            <td colspan="3"><%= f.text_area :address, autofocus: true, class: "sign-up-address" %></td>
+          </tr>
+          <tr>
+            <th>電話番号（ハイフンなし）</th>
+            <td class="sign-up-small-cell"></td>
+            <td><%= f.text_field :phone_number, autofocus: true %></td>
+          </tr>
+          <tr>
+            <th>パスワード（６文字以上）</th>
+            <td class="sign-up-small-cell"></td>
+            <td><%= f.password_field :password %></td>
+          </tr>
+          <tr>
+            <th>パスワード（確認用）</th>
+            <td class="sign-up-small-cell"></td>
+            <td><%= f.password_field :password_confirmation, autocomplete: "current-password" %></td>
+          </tr>
+          <tr class="d-block mx-auto">
+            <td>
+              <%= f.submit "新規登録", class:"btn btn-success mt-3" %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <% end %>
+      <br>
+      </br>
+      </div>
+  </div>
+  <div class="row">
+    <div>
+      <h3>既に登録済みの方</h3>
+      <span class="col-xs-6 col-xs-offset-2 sign-up-message"><%= link_to 'こちら', new_customer_session_path %>からログインしてください。</span>
+    </div>
+  </div>
+</div>

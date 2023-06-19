@@ -17,3 +17,28 @@
 @import 'font-awesome-sprockets';
 @import 'font-awesome';
 
+body{
+    background-image: image-url("haikei.png");
+}
+h1{
+    padding-bottom: 20px;
+}
+ .body{
+     padding: 40px 0 20px;
+     
+ }
+ .hidden{
+     display: none;
+ }
+ .main-img{
+    margin: 0 calc(50% - 50vw);
+    width: 100vw;
+    position: relative;
+    top: -40px;
+    height: 300px;
+   
+    background: linear-gradient(135deg, rgba(230, 230, 230, .6),rgba(255, 240, 240, .8)), url("top-img.jpg"); ;
+    background-size: cover;
+    background-position: center;
+ }
+ 

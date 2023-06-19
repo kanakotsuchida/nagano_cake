@@ -1,21 +1,17 @@
 class Admin::ItemsController < ApplicationController
+     before_action :authenticate_admin!
   def index
-    @items = Item.page(params[:page]).per(10)
+    @items = Item.all
   end
 
   def new
     @item = Item.new
   end
-  
+
   def create
     @item = Item.new(item_params)
-    if @item.save
-      flash.now[:success] = "商品の新規登録が完了しました。"
-      redirect_to admin_item_path(@item)
-    else
-      flash.now[:danger] = "商品の新規登録内容に不備があります。"
-      render :new
-    end
+    @item.save
+    redirect_to admin_items_path
   end
 
   def show
@@ -23,29 +19,18 @@ class Admin::ItemsController < ApplicationController
   end
 
   def edit
-     @item = Item.find(params[:id])
+    @item = Item.find(params[:id])
+  end
+
+  def update
+    @item = Item.find(params[:id])
+    @item.update(item_params)
+    redirect_to  admin_items_path
   end
   
-  def update
-     @item = Item.find(params[:id])
-     if @item.update(item_params)
-       flash.now[:success] = "商品詳細の変更が完了しました。"
-       redirect_to admin_item_path(@item)
-     else
-       flash.now[:danger] = "商品詳細の変更内容に不備があります。"
-       render :edit
-     end
-  end  
-
-  def search
-    @items = Item.page(params[:page]).per(10)
-    @word_for_search = Genre.find(params[:word_for_search])
-    @search_items = Item.where(genre: params[:word_for_search])
-  end
-
   private
+  
   def item_params
-    params.require(:item).permit(:image, :name, :description, :genre_id, :price_excluding_tax, :sales_status)
+   params.require(:item).permit(:image,:name,:introduction,:genre_id,:non_taxed_price,:is_sales_status)
   end
-    
 end

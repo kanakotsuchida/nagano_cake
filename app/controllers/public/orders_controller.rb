@@ -1,83 +1,89 @@
 class Public::OrdersController < ApplicationController
-   include Public::OrdersHelper
+  include ApplicationHelper
   before_action :authenticate_customer!
-  before_action :cart_check, only: [:new, :confirm, :create]
-
-  def cart_check
-    unless CartItem.find_by(customer_id: current_customer.id)
-      flash[:danger] = "カートに商品がない状態です"
-      redirect_to root_url
-    end
-  end
-
-  def new
-    @order = Order.new
-    @shipping_addresses = current_customer.shipping_addresses
-  end
-
-  def confirm
-    @order = Order.new
-    @cart_items = CartItem.where(customer_id: current_customer.id)
-    customer = current_customer
-    address_option = params[:order][:address_option].to_i
-
-    @order.payment_option = params[:order][:payment_option].to_i
-    @order.temporary_information_input(customer.id)
-
-    if address_option == 0
-      @order.order_in_postcode_address_name(customer.postcode, customer.address, customer.last_name)
-    elsif address_option == 1
-      shipping = ShippingAddress.find(params[:order][:registration_shipping_address])
-      @order.order_in_postcode_address_name(shipping.shipping_postcode, shipping.shipping_address, shipping.shipping_name)
-    elsif address_option == 2
-      @order.order_in_postcode_address_name(params[:order][:shipping_postcode], params[:order][:shipping_address], params[:order][:shipping_name])
-    else
-    end
-    unless @order.valid?
-      flash[:danger] = "お届け先の内容に不備があります<br>・#{@order.errors.full_messages.join('<br>・')}"
-      p @order.errors.full_messages
-      redirect_back(fallback_location: root_path)
-    end
-    # render plain: @order.inspect
-  end
-
-  def create
-    @order = Order.new(order_params)
-    @order.customer_id = current_customer.id
-    @order.shipping_fee = 800
-    if @order.save
-      @cart_items = CartItem.where(customer_id: current_customer.id)
-      @cart_items.each do |cart_item|
-        order_detail = OrderDetail.new
-        order_detail.item_id = cart_item.item_id
-        order_detail.order_id = @order.id
-        order_detail.amount = cart_item.amount
-        order_detail.price_including_tax = change_price_excluding_tax(cart_item.item.price_excluding_tax)
-        order_detail.production_status = 0
-        if order_detail.save
-          @cart_items.destroy_all
-        end
-      end
-      redirect_to orders_thanks_path
-    else
-    end
-  end
-
-  def thanks
+  
+  def index
+    @orders = current_customer.orders
   end
 
   def show
     @order = Order.find(params[:id])
+    @order_details = @order.order_details
+    @total = @order.total_payment - 800
   end
 
-  def index
-    @orders = Order.where(customer_id: current_customer.id).order(created_at: :desc)
+  def new
+    @order = Order.new
+    @order_name = current_customer
+    @addresses = current_customer.shopping_addresses
+  end
+
+  def confirmation
+    @cart_items = current_customer.cart_items
+    
+    @order = Order.new(customer: current_customer,payment_method: params[:order][:payment_method])
+    @total = @cart_items.sum(&:subtotal)
+    @order.total_payment = @total + 800
+    
+    if params[:order][:my_address] == "1"
+      @order.post_code = current_customer.post_code
+      @order.address = current_customer.address
+      @order.name = current_customer.full_name
+      
+    elsif params[:order][:my_address] == "2"
+      ship = ShoppingAddress.find(params[:order][:address_id])
+      @order.post_code = ship.post_code
+      @order.address = ship.address
+      @order.name = ship.name
+      
+    elsif params [:order][:my_address] == "3"
+      @order.post_code = params[:order][:post_code]
+      @order.address = params[:order][:address]
+      @order.name = params[:order][:name]
+      @ship = "1"
+      
+      unless @order.valid? == true
+        @addresses = Address.where(customer: current_customer)
+        render :new
+      end
+    end  
+  end
+
+  def complete
+  end
+
+  def create
+      @cart_items = current_customer.cart_items
+      @order = current_customer.orders.new(order_params)
+      
+       @order.save
+        @cart_items.each do |cart_item|
+        @order_detail = OrderDetail.new
+        @order_detail.item_id = cart_item.item_id
+        @order_detail.order_id = @order.id
+        @order_detail.quantity = cart_item.quantity
+        @order_detail.price = cart_item.item.with_tax_price
+        @order_detail.save
+        end
+        
+      if params[:order][:ship] == "1"
+        current_customer.address.create(address_params)
+      end
+        
+        @cart_items.destroy_all
+        
+        redirect_to complete_path
+      
   end
 
   private
 
   def order_params
-    params.require(:order).permit(:shipping_postcode, :shipping_address, :shipping_name, :total_payment, :payment_option)
+    params.require(:order).permit(:post_code, :address, :name, :payment_method, :total_payment)
   end
-
+  
+  def address_params
+    params.require(:order).permit(:post_code, :address, :name)
+  end
 end
+ 
