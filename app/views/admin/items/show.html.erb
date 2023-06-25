@@ -23,17 +23,10 @@
       <tr>
           <th>商品価格　<br>
             (税込価格)</th>
-          <td><%= @item.non_taxed_price %>(<%= @item.with_tax_price%>円)</td>
+             <td>税込価格(税抜価格)</td><td><%= @item.price.to_s(:delimited) %>円</tr>
       </tr>
-      <tr>
-          <th>販売ステータス</th>
-          <td> <% if @item.is_sales_status == true %>
-              <%="販売中"%>
-              <% else %>
-              <%= "販売停止中"%>
-              <% end %>
-  　　　　</td>
-      </tr>
+      
+      
   </table>
    <div><%= link_to "編集する",edit_admin_item_path, class: "btn btn-success btn-lg "%></div>
   </div>

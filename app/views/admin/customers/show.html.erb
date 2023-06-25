@@ -1,60 +1,16 @@
-<% provide(:title, "会員情報編集") %>
-<div class="container">
-  <h2 class="text-center m-5"><%= @customer.first_name %> <%= @customer.last_name %>さんの会員情報編集</h2>
-  <div class="row d-flex justify-content-center">
-
-  <%= form_with model: @customer, url: admin_customer_path, local: true do |f| %>
-    <div class="col-xs-10 offset-1">
-      <div class="form-group col-xs-9">
-        <%= f.label :"会員ID", class: "col-sm-4" %>
-        <%= f.label :"#{@customer.id}" %>
-      </div>
-      <div class="form-group col-xs-9">
-        <%= f.label :"氏名", class: "col-sm-4 control-label" %>
-        <%= f.text_field :first_name, class: "col-sm-3 form-control-static" %>　
-        <%= f.text_field :last_name, class: "col-sm-3 form-control-static name" %>
-      </div>
-
-      <div class="form-group col-xs-9">
-        <%= f.label :"フリガナ", class: "col-sm-4 control-label" %>
-        <%= f.text_field :first_name_kana, class: "col-sm-3 form-control-static name" %>
-        <%= f.text_field :last_name_kana, class: "col-sm-3 form-control-static name" %>
-      </div>
-
-      <div class="form-group col-xs-9">
-        <%= f.label :"郵便番号", class: "col-sm-4 control-label" %>
-        <%= f.text_field :post_code, class: "col-sm-3" %>
-      </div>
-
-      <div class="form-group col-xs-9">
-        <%= f.label :"住所", class: "col-sm-4 control-label" %>
-        <%= f.text_field :address, class: "col-sm-7" %>
-      </div>
-
-      <div class="form-group col-xs-9">
-        <%= f.label :"電話番号", class: "col-sm-4 control-label" %>
-        <%= f.text_field :phone_number, class: "col-sm-4" %>
-      </div>
-      
-      <div class="form-group col-xs-9">
-        <%= f.label :"メールアドレス", class: "col-sm-4 control-label" %>
-        <%= f.text_field :email, class: "col-sm-6" %>
-      </div>
-
-      <div class="form-group col-xs-9">
-        <%= f.label :"会員ステータス", class: "col-sm-4 control-label" %>
-        　<%= f.radio_button :is_deleted, false %>
-        　<%= f.label :is_deleted, "有効"%>
-        　<%= f.radio_button :is_deleted, true %>
-        　<%= f.label :is_deleted, "退会" %>
-      </div>
-    </div>
-      <div class="form-group col-xs-9 d-flex justify-content-around">
-        <%= f.submit '変更を保存する' ,class: "btn btn-success" %>
-        <%= link_to '会員詳細画面へ戻る',admin_customer_path, class:"btn btn-outline-secondary"%>
-      </div>
-
-  <% end %>
-
-  </div>
-</div>
+<h2><%= @customer.last_name %><%= @customer.first_name %>さんの会員詳細</h2>
+会員ID<%= @customer.id %><br>
+氏名<%= @customer.last_name %><%= @customer.first_name %><br>
+フリガナ<%= @customer.last_name_kana %><%= @customer.first_name_kana %><br>
+郵便番号<%= @customer.postal_code %><br>
+住所<%= @customer.address %><br>
+電話番号<%= @customer.telephone_number %><br>
+メールアドレス<%= @customer.email %><br>
+会員ステータス<% if @customer.is_deleted == false %>
+      有効
+      <% else %>
+      退会
+    <% end %></td><br>
+<%= form_with model: @customer, url: edit_admin_customer_path, method: :patch do |f| %>
+<% end %>
+<%= link_to '編集する', edit_admin_customer_path(@customer.id) %>

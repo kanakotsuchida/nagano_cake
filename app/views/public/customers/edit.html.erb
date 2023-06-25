@@ -1,49 +1,44 @@
-<div class="container">
-  <h2 class="my-5">会員情報編集</h2>
-  <div class="row">
-    <%= form_with model:@customer,url:customer_path, method: :patch, local: true do |f| %>
-    
-    <div class="col-xs-12">
-      <div class="form-group row">
-        <tr>
-          <th><%= f.label :" 氏名",class:"col-4"%></th>
-          <td>姓</td>
-          <td><%= f.text_field :first_name, class:"col-3 ml-3"%></td>
-          <td>名</td>
-          <td><%= f.text_field :last_name, class:"col-3"%></td>
-        </tr>
-      </div>
-      
-      <div class="form-group row">
-        <tr>
-          <th><%= f.label :"フリガナ", class:"col-4"%></th>
-          <td>セイ</td>
-          <td><%= f.text_field :first_name_kana, class:"col-3 ml-3"%></td>
-          <td>メイ</td>
-          <td><%= f.text_field :last_name_kana, class:"col-3"%></td>
-        </tr>
-      </div>
-      
-      <div class="form-group row">
-        <%= f.label :"郵便番号", class:"col-4"%>
-        <%= f.text_field :post_code, class:"col-4"%>
-      </div>
-      
-      <div class="form-group row">
-        <%= f.label :"電話番号", class:"col-4"%>
-        <%= f.text_field :phone_number, class:"col-4"%>
-      </div>
-      
-      <div class="form-group row">
-        <%= f.label :"メールアドレス", class:"col-4"%>
-        <%= f.email_field :email, class:"col-8"%>
-      </div>
-      
-      <div>
-        <%= f.submit "編集内容を保存する", class:"btn btn-success mr-5"%>
-        <%= link_to "退会する", unsubscribe_path, class:"btn btn-danger ml-5"%>
-      </div>
-      <% end %>
-    </div>
+<h1>会員情報編集</h1>
+<%= form_with model: @customer, url: public_customers_path(@customer.id), method: :patch do |f| %>
+  <div class="container">
+    <table class="table-borderless">
+      <th><%= f.label :名前 %></th>
+      <td>（姓）<%= f.text_field :last_name %></td>
+      <td>（名）<%= f.text_field :first_name %></td>
+    </table>
+
+  <table class="table-borderless">
+    <th><%= f.label :フリガナ %></th>
+    <td>（セイ）<%= f.text_field :last_name_kana %></td>
+    <td>（メイ）<%= f.text_field :first_name_kana %></td>
+  </table>
+
+
+  <table class="table-borderless">
+    <th><%= f.label :メールアドレス %></th>
+    <td><%= f.email_field :email, autofocus: true, autocomplete: "email" %></td>
+  </table>
+
+
+  <table class="table-borderless">
+    <th><%= f.label :郵便番号（ハイフンなし） %></th>
+    <td><%= f.text_field :postal_code %></td>
+  </table>
+
+
+  <table class="table-borderless">
+    <th><%= f.label :住所 %></th>
+    <td><%= f.text_field :address %></td>
+  </table>
+
+  <table class="table-borderless">
+    <th><%= f.label :電話番号（ハイフンなし） %></th>
+    <td><%= f.text_field :telephone_number %></td>
+  </table>
+
+  <div class="actions">
+    <%= f.submit "編集内容を保存する", class: "btn btn-sm btn-success" %>
   </div>
-</div>
+<% end %>
+  <%= link_to '退会する', unsubscribe_public_customers_path, class: "btn btn-sm btn-danger" %>
+

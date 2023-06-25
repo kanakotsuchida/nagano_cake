@@ -40,17 +40,17 @@
           <tr>
           <th>郵便番号（ハイフンなし）</th>
           <td class="sign-up-small-cell"></td>
-          <td><%= f.text_field :post_code, autofocus: true %></td>
+          <td><%= f.text_field :postal_code, autofocus: true %></td>
           </tr>
           <tr>
             <th>住所</th>
             <td class="sign-up-small-cell"></td>
-            <td colspan="3"><%= f.text_area :address, autofocus: true, class: "sign-up-address" %></td>
+            <td><%= f.text_field :address, autofocus: true %></td>
           </tr>
           <tr>
             <th>電話番号（ハイフンなし）</th>
             <td class="sign-up-small-cell"></td>
-            <td><%= f.text_field :phone_number, autofocus: true %></td>
+            <td><%= f.text_field :telephone_number, autofocus: true %></td>
           </tr>
           <tr>
             <th>パスワード（６文字以上）</th>

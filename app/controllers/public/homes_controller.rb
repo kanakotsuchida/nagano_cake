@@ -1,10 +1,7 @@
 class Public::HomesController < ApplicationController
-  def top
-    # default_scope -> {order(created_at: desc)}
-    @genres = Genre.all
-    @items = Item.last(4)
-  end
 
-  def about
+    # default_scope -> {order(created_at: desc)}
+  def top
+    @items = Item.order('id DESC').limit(4)
   end
 end

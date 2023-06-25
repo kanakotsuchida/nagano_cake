@@ -1,20 +1,18 @@
-<div class="container mt-5">
- 
+ <div class="title mt-5 pl-5">
+<h4><strong>商品一覧</strong></h4>
+</div>
+<div class="container">
   <div class="row">
-    <div class="col-12">
-      <h3>商品一覧(全<%= @items.count%>件)</h3>
-      <div class="d-flex flex-wrap justify-content-around">
-        <% @items.each do |item| %>
-          <%= link_to item_path(item), class:"card mb-3 shadow", style:"padding: 0; height:250px; width: 260px" do %>
-            <%= image_tag item.get_image(200,200), class:"card-img-top", alt:"Card-image", style:"height:150px; width:auto; object-fit: cover" %>
-            <div class="card-body" style="color:black; background-color:pink">
-              <h5 class="card-title" style=" overflow: scroll; max-width:240px"><%= item.name %></h5>
-              <!--<p class="card-text" style=" overflow: scroll; max-width:160px"><%= item.introduction %></p>-->
-              <p class="card-text">¥<%= item.with_tax_price %></p>
-            </div>
-          <% end %>
+      <% @items.each do |item| %>
+        <div class="col-md-3"><%= link_to public_item_path(item.id) do %>
+          <%= image_tag item.get_image(380,180) %>
+          <% end %></td>
+          <p><strong><%= item.name %></strong></hp>
+          <p><strong>¥<%= item.price.to_s(:delimited) %></strong></p>
+        </div>
         <% end %>
-      </div>
-    </div>
   </div>
+</div>
+<div class="d-flex justify-content-center">
+  <%= paginate @items %>
 </div>
