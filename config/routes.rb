@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-   root to: "public/homes#top"
+  root to: "public/homes#top"
 
   devise_for :customers, skip: [:passwords], controllers: {
     registrations: "public/registrations",
@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   namespace :public do
     get 'homes/about'
 
-    resource :customers, only: [:show, :edit, :update, ] do
+    resource :customers, only: [:show, :edit, :update] do
       collection do
         get :unsubscribe
         patch :withdraw
@@ -44,5 +44,5 @@ Rails.application.routes.draw do
     end
   end
 
-
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -1,27 +1,11 @@
 class ApplicationController < ActionController::Base
-  before_action :configre_permitted_parameters, if: :devise_controller?
+ before_action :configre_permitted_parameters, if: :devise_controller?
 
 
-   protected
- def after_sign_in_path_for(resource)
-    if customer_signed_in?
-        root_path
-    else
-       admin_root_path 
-    end
- end
+  protected
 
-  def after_sign_out_path_for(resource)
-    if resource == :admin
-       new_admin_session_path
-    else
-       root_path
-    end
+  def configre_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:last_name, :first_name, :last_name_kana, :first_name_kana, :postal_code, :address, :telephone_number])
   end
 
- def configure_permitted_parameters
-
-    #added_attrs = [ :email, :encrypted_password, :last_name, :first_name, :last_name_kana, :first_name_kana, :postal_code, :address, :telephone_number]
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :last_name, :first_name, :last_name_kana, :first_name_kana, :postal_code, :address, :telephone_number])
- end
 end

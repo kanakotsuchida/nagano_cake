@@ -4,7 +4,7 @@
       <div>
         <h4 class="item-title">商品詳細</h4>　<br>
       </div>
-     <div> <%= image_tag @item.get_image(300,300)%></div>
+     <%= image_tag @item.get_image(300,300) %>
     </div>
     <div class="col-7 row justify-content-around mt-2">
     <table class="table-demo">
@@ -23,14 +23,12 @@
       <tr>
           <th>商品価格　<br>
             (税込価格)</th>
-             <td>税込価格(税抜価格)</td><td><%= @item.price.to_s(:delimited) %>円</tr>
+          <td><%= @item.price %>(<%= @item.with_tax_price%>円)</td>
       </tr>
-      
-      
+     
   </table>
    <div><%= link_to "編集する",edit_admin_item_path, class: "btn btn-success btn-lg "%></div>
   </div>
  </div>
 </div>
-
 
